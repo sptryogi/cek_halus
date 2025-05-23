@@ -87,6 +87,7 @@ if st.button("🔍 Deteksi & Konversi"):
             return response.choices[0].message.content.strip()
 
         st.markdown("### 🔄 Konversi Kata HALUS ke LOMA:")
+        kata_loma_dict = {}
         for kata in sorted(detected_halus):
             kata_loma = cari_loma_dari_sinonim(kata)
             if kata_loma:
