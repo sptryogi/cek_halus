@@ -91,33 +91,42 @@ if st.button("🔍 Deteksi & Konversi"):
         for kata in sorted(detected_halus):
             kata_loma = cari_loma_dari_sinonim(kata)
             if kata_loma:
+                kata_loma_dict[kata] = kata_loma
                 st.markdown(f"- **{kata}** → {kata_loma} (dari SINONIM → LOMA)")
             else:
                 kata_ai = ubah_ke_loma_ai(kata)
+                kata_loma_dict[kata] = kata_ai
                 st.markdown(f"- **{kata}** → {kata_ai} (dibantu AI)")
-                # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
-        def ganti_halus_ke_loma(teks_asli, kata_loma_dict):
+
+        # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
+        def replace_halus_with_loma(text):
             def replacer(match):
-                original_word = match.group(0)
-                core = re.sub(r"^[\"'.,!?;:()]*|[\"'.,!?;:()]*$", "", original_word).lower()
+                word = match.group(0)
+                core = re.sub(r"^[\"'.,!?;:()]*|[\"'.,!?;:()]*$", "", word).lower()
                 if core in kata_loma_dict:
-                    loma_word = kata_loma_dict[core]
-
-                    # Jaga kapitalisasi jika awal kalimat atau huruf kapital
-                    if original_word[0].isupper():
-                        loma_word = loma_word.capitalize()
-            
-                    return re.sub(core, loma_word, original_word, flags=re.IGNORECASE)
+                    # Pertahankan tanda baca dan kapitalisasi asli
+                    before = re.match(r"^[\"'.,!?;:()]*", word).group(0)
+                    after = re.match(r".*?([\"'.,!?;:()]*)$", word).group(1)
+                    original_word = word.strip('''"'.!?;:(),''')
+                    if original_word.istitle():
+                        replacement = kata_loma_dict[core].capitalize()
+                    elif original_word.isupper():
+                        replacement = kata_loma_dict[core].upper()
+                    else:
+                        replacement = kata_loma_dict[core]
+                    return f"{before}{replacement}{after}"
                 else:
-                    return original_word
+                    return word
 
-            final = re.sub(r"\b[\w\'\-]+[.,!?\"']*", replacer, teks_asli)
-            return final
+            paragraphs = text.split('\n')
+            replaced_paragraphs = [re.sub(r"\b[\w\'\-]+[.,!?\"']*", replacer, para) for para in paragraphs]
+            return "<br>".join(replaced_paragraphs)
 
-        final_output = ganti_halus_ke_loma(user_input, kata_loma_dict)
-        
+        final_output = replace_halus_with_loma(user_input)
+
         st.markdown("---")
         st.markdown("### ✅ Teks Akhir (Sudah dalam bentuk LOMA):")
         st.markdown(f"<p style='font-size: 18px; line-height: 1.8'>{final_output}</p>", unsafe_allow_html=True)
+
     else:
         st.warning("Mohon masukkan kalimat terlebih dahulu.")
