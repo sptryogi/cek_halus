@@ -96,7 +96,6 @@ if st.button("🔍 Deteksi & Konversi"):
                 kata_ai = ubah_ke_loma_ai(kata)
                 st.markdown(f"- **{kata}** → {kata_ai} (dibantu AI)")
                 # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
-        final_ou tput = user_input
         def ganti_halus_ke_loma(teks_asli, kata_loma_dict):
             def replacer(match):
                 original_word = match.group(0)
