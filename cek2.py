@@ -96,11 +96,27 @@ if st.button("🔍 Deteksi & Konversi"):
                 kata_ai = ubah_ke_loma_ai(kata)
                 st.markdown(f"- **{kata}** → {kata_ai} (dibantu AI)")
                 # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
-        #final_output = user_input
+        final_ou tput = user_input
+        def ganti_halus_ke_loma(teks_asli, kata_loma_dict):
+            def replacer(match):
+                original_word = match.group(0)
+                core = re.sub(r"^[\"'.,!?;:()]*|[\"'.,!?;:()]*$", "", original_word).lower()
+                if core in kata_loma_dict:
+                    loma_word = kata_loma_dict[core]
 
-        for kata, loma in kata_loma_dict.items():
-            final_output = re.sub(rf"\b{kata}\b", loma, final_output, flags=re.IGNORECASE)
+                    # Jaga kapitalisasi jika awal kalimat atau huruf kapital
+                    if original_word[0].isupper():
+                        loma_word = loma_word.capitalize()
+            
+                    return re.sub(core, loma_word, original_word, flags=re.IGNORECASE)
+                else:
+                    return original_word
 
+            final = re.sub(r"\b[\w\'\-]+[.,!?\"']*", replacer, teks_asli)
+            return final
+
+        final_output = ganti_halus_ke_loma(user_input, kata_loma_dict)
+        
         st.markdown("---")
         st.markdown("### ✅ Teks Akhir (Sudah dalam bentuk LOMA):")
         st.markdown(f"<p style='font-size: 18px; line-height: 1.8'>{final_output}</p>", unsafe_allow_html=True)
