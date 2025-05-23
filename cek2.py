@@ -4,7 +4,7 @@ import re
 from openai import OpenAI
 
 # DeepSeek client
-client = OpenAI(api_key="API_KEY", base_url="https://api.deepseek.com")
+client = OpenAI(api_key=st.secrets["API_KEY"], base_url="https://api.deepseek.com")
 
 @st.cache_data
 def load_kamus():
