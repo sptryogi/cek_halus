@@ -96,7 +96,7 @@ if st.button("🔍 Deteksi & Konversi"):
                 kata_ai = ubah_ke_loma_ai(kata)
                 st.markdown(f"- **{kata}** → {kata_ai} (dibantu AI)")
                 # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
-        final_output = user_input
+        #final_output = user_input
 
         for kata, loma in kata_loma_dict.items():
             final_output = re.sub(rf"\b{kata}\b", loma, final_output, flags=re.IGNORECASE)
