@@ -97,13 +97,8 @@ if st.button("🔍 Deteksi & Konversi"):
                 # 🔚 Membuat versi akhir teks: HALUS → LOMA (final cleaned version)
         final_output = user_input
 
-        for kata in detected_halus:
-            kata_loma = cari_loma_dari_sinonim(kata)
-            if not kata_loma:
-                kata_loma = ubah_ke_loma_ai(kata)
-
-            # Ganti semua bentuk kata HALUS ke LOMA (menghormati tanda baca)
-            final_output = re.sub(rf"\b{kata}\b", kata_loma, final_output, flags=re.IGNORECASE)
+        for kata, loma in kata_loma_dict.items():
+            final_output = re.sub(rf"\b{kata}\b", loma, final_output, flags=re.IGNORECASE)
 
         st.markdown("---")
         st.markdown("### ✅ Teks Akhir (Sudah dalam bentuk LOMA):")
